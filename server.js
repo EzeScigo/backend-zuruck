@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import data from './data';
+import data from './data.js';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import categoryRouter from './routers/categoryRouter.js';
