@@ -24,7 +24,7 @@ const uniqueMessage = error => {
 /**
  * Get the erroror message from error object
  */
-exports.errorHandler = error => {
+const errorHandler = error => {
   let message = "";
 
   if (error.code) {
@@ -45,3 +45,5 @@ exports.errorHandler = error => {
 
   return message;
 };
+
+export default errorHandler;
