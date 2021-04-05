@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "ecommerce app",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon --experimental-modules server.js"
   },
   "author": "ezequielscigolini",
   "license": "MIT",
