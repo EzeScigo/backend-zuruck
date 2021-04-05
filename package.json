@@ -2,13 +2,12 @@
   "name": "ecommerce",
   "version": "1.0.0",
   "description": "ecommerce app",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon --watch backend --exec babel-node backend/server.js",
-    "stop-win": "Taskkill /IM node.exe /F"
+    "start": "nodemon server.js"
   },
-  "author": "ezequiel-scigolini",
-  "license": "ISC",
+  "author": "ezequielscigolini",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
