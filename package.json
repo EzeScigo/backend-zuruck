@@ -5,10 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "clean": "rm -rf build && mkdir build",
-    "build-babel": "babel -d ./build ./src -s",
-    "build": "npm run clean && npm run build-babel",
-    "start": "npm run build && node ./build/server.js"
+    "server": "nodemon server.js --exec babel-node",
+    "heroku-postbuild": "npm install",
+    "start": "babel-node server.js"
   },
   "author": "ezequielscigolini",
   "license": "MIT",
@@ -25,6 +24,7 @@
     "@babel/core": "^7.13.14",
     "@babel/node": "^7.13.13",
     "@babel/preset-env": "^7.13.12",
+    "babel-preset-env": "^1.7.0",
     "nodemon": "^2.0.7"
   },
   "engines": {
