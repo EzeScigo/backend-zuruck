@@ -4,7 +4,7 @@ import data from './data.js';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import categoryRouter from './routers/categoryRouter.js';
-import { } from 'dotenv/config';
+import { } from 'dotenv/config.js';
 
 const app = express();
 try {
