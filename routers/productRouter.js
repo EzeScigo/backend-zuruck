@@ -35,6 +35,61 @@ productRouter.get('/preview', expressAsyncHandler(async (req, res) => {
 // http://localhost:5600/api/products/beers/accesories?&limit=2&params=...
 
 // query params: limit, name, min, max, order
+// ?query=string will search products with name/description/brand where 'string' is included
+// also, will search for categories with name 'string' or included.
+// it returns an object with the results like so:
+// { products: [], categories: []}
+productRouter.get('/', expressAsyncHandler(async (req, res) => {
+  if (req.query.query) {
+
+    const regExp = new RegExp('.*' + req.query.query + '.*', 'i');
+
+    try {
+      let product = await Product.find({ $text: { $search: regExp } });
+      let category = await Category.find({ name: regExp })
+      res.send({
+        'products': product,
+        'categories': category
+      });
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).send({
+        message: err.message
+      });
+    }
+  }
+
+}))
+
+productRouter.get('/related/:productId', expressAsyncHandler(async (req, res) => {
+  let limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  // let categories = [ObjectId(req.params.id), '604676094750f24af0cbda16'];
+  // console.log(categories);
+
+  try {
+    let product = await Product.findById(req.params.productId);
+    console.log(product);
+    req.productCategories = product.categoryIds.map(s => ObjectId(s));
+
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).send({
+      message: err.message
+    });
+  };
+
+  try {
+    const products = await Product.find({ categoryIds: { $elemMatch: { $in: req.productCategories } } })
+      .limit(limit)
+      .populate('categoryIds', '_id name')
+    res.send(products);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).send({
+      message: err.message
+    })
+  }
+}));
 
 productRouter.get('/:category?/:subcategory?', expressAsyncHandler(async (req, res) => {
   const limit = req.query.limit;
@@ -120,35 +175,7 @@ productRouter.get('/:category?/:subcategory?', expressAsyncHandler(async (req, r
 // Will return any Product that shares at least one category with Product queried.
 // /api/products/related/{product-id}
 
-productRouter.get('/related/:productId', expressAsyncHandler(async (req, res) => {
-  let limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  // let categories = [ObjectId(req.params.id), '604676094750f24af0cbda16'];
-  // console.log(categories);
 
-  try {
-    let product = await Product.findById(req.params.productId);
-    console.log(product);
-    req.productCategories = product.categoryIds.map(s => ObjectId(s));
-
-  } catch (err) {
-    console.log(err.message);
-    return res.status(500).send({
-      message: err.message
-    });
-  };
-
-  try {
-    const products = await Product.find({ categoryIds: { $elemMatch: { $in: req.productCategories } } })
-      .limit(limit)
-      .populate('categoryIds', '_id name')
-    res.send(products);
-  } catch (err) {
-    console.log(err.message);
-    return res.status(500).send({
-      message: err.message
-    })
-  }
-}));
 
 
 
